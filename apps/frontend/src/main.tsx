@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./app";
-import "./index.css";
+import "@repo/tailwind-config/global.css";
 
 const container = document.getElementById("root");
 if (container) {
