@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import React, { useState } from "react";
 import {
   Select,
@@ -19,13 +20,28 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { CreditCard } from "..";
+import { creditCardMask } from "../utils/masks/credit-card";
+import { nameValidator } from "../utils/validators/name";
+import { cardNumberValidator } from "../utils/validators/cardNumber";
+import { uploadCardData } from "../../services/cardValidation";
 
 export function PaymentCard(): JSX.Element {
   const [name, setName] = useState("renato");
+  const [nameError, setNameError] = useState("");
+
   const [number, setNumber] = useState("");
-  const [month, setMonth] = useState("");
+  const [numberError, setNumberError] = useState("");
+
+  const [cardMonth, setCardMonth] = useState("");
   const [year, setYear] = useState("");
+
   const [cvc, setCvc] = useState("");
+  const [cvcError, setCvcError] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  // const snackbar = useSnackbar();
 
   const months = [
     "January",
@@ -41,6 +57,72 @@ export function PaymentCard(): JSX.Element {
     "November",
     "December",
   ];
+
+  const scrollToError = (elementId: string, offset = 85) => {
+    const elementToScroll = document.getElementById(elementId);
+    if (!elementToScroll) return;
+    const offsetTop = elementToScroll.offsetTop - offset;
+    window.scrollTo({ top: offsetTop, behavior: "smooth" });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    const nameValidation = nameValidator(name);
+    const numberValidation = cardNumberValidator(number);
+
+    if (
+      name === "" ||
+      number === "" ||
+      cardMonth === "" ||
+      year === "" ||
+      cvc === ""
+    ) {
+      // snackbar("Preencha todos os dados para atualizar.", 3000, "error");
+    }
+
+    if (nameValidation.error) {
+      setNameError(nameValidation.message);
+      setLoading(false);
+      scrollToError("name");
+      return;
+    }
+    if (numberValidation.error) {
+      setNumberError(numberValidation.message);
+      setLoading(false);
+      scrollToError("number");
+      return;
+    }
+
+    const getDate = (month: string, year: string) => {
+      const monthNumber = months.findIndex((item) => item === month) + 1;
+      return `${monthNumber}/${year}`;
+    };
+
+    const currentCard = {
+      name,
+      cardNumber: number,
+      expiration: getDate(cardMonth, year),
+      cvc,
+    };
+
+    try {
+      const result = await uploadCardData(currentCard);
+
+      if (result) {
+        // snackbar("Dados atualizados com sucesso!", 3000);
+      } else {
+        // snackbar(
+        //   "Houve um erro na confirmação de dados, tente novamente mais tarde",
+        //   3000
+        // );
+      }
+    } catch (exception) {
+      console.error(exception);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card>
@@ -91,14 +173,32 @@ export function PaymentCard(): JSX.Element {
           </div>
         </RadioGroup>
 
+        <CreditCard />
+
         <div className="grid gap-2">
           <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder="First Last" value="renato" />
+          <Input
+            id="name"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setName(e.target.value);
+              setNameError("");
+            }}
+            placeholder="First Last"
+            value={name}
+          />
         </div>
 
         <div className="grid gap-2">
           <Label htmlFor="number">Card number</Label>
-          <Input id="number" placeholder="" />
+          <Input
+            id="number"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setNumber(e.target.value);
+              setNumberError("");
+            }}
+            placeholder=""
+            value={creditCardMask(number)}
+          />
         </div>
 
         <div className="grid grid-cols-3 gap-4">
@@ -110,7 +210,13 @@ export function PaymentCard(): JSX.Element {
               </SelectTrigger>
               <SelectContent>
                 {months.map((month, i) => (
-                  <SelectItem key={month} value={`${i + 1}`}>
+                  <SelectItem
+                    key={month}
+                    onClick={() => {
+                      setCardMonth(month);
+                    }}
+                    value={`${i + 1}`}
+                  >
                     {month}
                   </SelectItem>
                 ))}
@@ -125,23 +231,42 @@ export function PaymentCard(): JSX.Element {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <SelectItem key={i} value={`${new Date().getFullYear() + i}`}>
-                    {new Date().getFullYear() + i}
-                  </SelectItem>
-                ))}
+                {Array.from({ length: 10 }, (_, i) => {
+                  const yearLabel = `${new Date().getFullYear() + i}`;
+                  return (
+                    <SelectItem
+                      key={i}
+                      onClick={() => {
+                        setYear(yearLabel);
+                      }}
+                      value={yearLabel}
+                    >
+                      {yearLabel}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="cvc">CVC</Label>
-            <Input id="cvc" placeholder="CVC" />
+            <Input
+              id="cvc"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setCvc(e.target.value);
+                setCvcError("");
+              }}
+              placeholder="CVC"
+              value={cvc}
+            />
           </div>
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Continue</Button>
+        <Button className="w-full" onClick={handleSubmit} type="submit">
+          Continue
+        </Button>
       </CardFooter>
     </Card>
   );
