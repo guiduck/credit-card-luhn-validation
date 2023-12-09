@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -30,11 +30,11 @@ export function PaymentCard(): JSX.Element {
   const [name, setName] = useState("renato");
   const [nameError, setNameError] = useState("");
 
-  const [number, setNumber] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
   const [numberError, setNumberError] = useState("");
 
   const [cardMonth, setCardMonth] = useState("");
-  const [year, setYear] = useState("");
+  const [cardYear, setCardYear] = useState("");
 
   const [cvc, setCvc] = useState("");
   const [cvcError, setCvcError] = useState("");
@@ -65,17 +65,28 @@ export function PaymentCard(): JSX.Element {
     window.scrollTo({ top: offsetTop, behavior: "smooth" });
   };
 
+  const getDate = () => {
+    const monthNumber = months.findIndex((item) => item === cardMonth) + 1;
+    return `${monthNumber}/${cardYear}`;
+  };
+
+  useEffect(() => {
+    console.log(getDate());
+    console.log(cardMonth);
+    console.log(cardYear);
+  }, [cardYear, cardMonth]);
+
   const handleSubmit = async () => {
     setLoading(true);
 
     const nameValidation = nameValidator(name);
-    const numberValidation = cardNumberValidator(number);
+    const numberValidation = cardNumberValidator(cardNumber);
 
     if (
       name === "" ||
-      number === "" ||
+      cardNumber === "" ||
       cardMonth === "" ||
-      year === "" ||
+      cardYear === "" ||
       cvc === ""
     ) {
       // snackbar("Preencha todos os dados para atualizar.", 3000, "error");
@@ -94,15 +105,10 @@ export function PaymentCard(): JSX.Element {
       return;
     }
 
-    const getDate = (month: string, year: string) => {
-      const monthNumber = months.findIndex((item) => item === month) + 1;
-      return `${monthNumber}/${year}`;
-    };
-
     const currentCard = {
       name,
-      cardNumber: number,
-      expiration: getDate(cardMonth, year),
+      cardNumber,
+      expiration: getDate(),
       cvc,
     };
 
@@ -193,30 +199,30 @@ export function PaymentCard(): JSX.Element {
           <Input
             id="number"
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              setNumber(e.target.value);
+              setCardNumber(e.target.value);
               setNumberError("");
             }}
             placeholder=""
-            value={creditCardMask(number)}
+            value={creditCardMask(cardNumber)}
           />
         </div>
 
         <div className="grid grid-cols-3 gap-4">
           <div className="grid gap-2">
             <Label htmlFor="month">Expires</Label>
-            <Select>
+            <Select
+              onValueChange={(e) => {
+                console.log(e);
+                console.log(months[Number(e) - 1]);
+                setCardMonth(months[Number(e) - 1]);
+              }}
+            >
               <SelectTrigger id="month">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent>
                 {months.map((month, i) => (
-                  <SelectItem
-                    key={month}
-                    onClick={() => {
-                      setCardMonth(month);
-                    }}
-                    value={`${i + 1}`}
-                  >
+                  <SelectItem key={month} value={`${i + 1}`}>
                     {month}
                   </SelectItem>
                 ))}
@@ -237,7 +243,7 @@ export function PaymentCard(): JSX.Element {
                     <SelectItem
                       key={i}
                       onClick={() => {
-                        setYear(yearLabel);
+                        setCardYear(yearLabel);
                       }}
                       value={yearLabel}
                     >
