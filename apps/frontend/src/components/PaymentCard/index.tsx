@@ -119,9 +119,9 @@ export function PaymentCard(): JSX.Element {
     }
 
     const currentCard = {
-      name,
+      holder: name,
       cardNumber: cardNumber.replace(/-/g, ""),
-      expiration: getDate(),
+      expires: getDate(),
       cvc,
     };
 
@@ -130,8 +130,8 @@ export function PaymentCard(): JSX.Element {
       snackbar(
         result.msg ||
           (result.type === "success"
-            ? "Dados atualizados com sucesso!"
-            : "Houve um erro na confirmação de dados, tente novamente mais tarde"),
+            ? "Data successfully uploaded!"
+            : "There was a problem, try again later"),
         3000,
         result.type
       );

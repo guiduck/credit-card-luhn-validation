@@ -1,9 +1,9 @@
 import api from "./api";
 
 interface Card {
-  name: string;
+  holder: string;
   cardNumber: string;
-  expiration: string;
+  expires: string;
   cvc: string;
 }
 
@@ -13,19 +13,23 @@ interface Response {
 }
 
 export const uploadCardData = async (card: Card): Promise<Response> => {
-  const endpoint = `api/validate-credit-card/`;
+  const endpoint = `api/cards/`;
 
   const body = {
-    name: card.name,
+    holder: card.holder,
     creditCardNumber: card.cardNumber,
-    expiration: card.expiration,
+    expires: card.expires,
     cvc: card.cvc,
   };
 
   try {
-    const response = await api.post(endpoint, body);
-    if (response.status === 200) {
-      return { type: "success", msg: "Your card was accepted!" };
+    const response: any = await api.post(endpoint, body);
+    console.log(response);
+    if (response && response.status === 200) {
+      return {
+        type: "success",
+        msg: response.data.message,
+      };
     }
     return {
       type: "error",
