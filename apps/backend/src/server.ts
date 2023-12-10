@@ -45,6 +45,7 @@ const statusHandler = (_: Request, res: Response) => {
 // Route handler for /validate-credit-card
 const validateCreditCardHandler = (req: Request, res: Response) => {
   const isValid = validateCreditCardNumber(req.body.creditCardNumber);
+  console.log("card from back", req.body.creditCardNumber);
 
   if (isValid) {
     return res.json({ success: true, message: "Credit card is valid" });

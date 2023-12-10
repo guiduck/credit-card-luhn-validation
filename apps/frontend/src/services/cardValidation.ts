@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import api from "./api";
 
 interface Card {
@@ -8,7 +7,12 @@ interface Card {
   cvc: string;
 }
 
-export const uploadCardData = async (card: Card) => {
+interface Response {
+  type: "success" | "error";
+  msg: string;
+}
+
+export const uploadCardData = async (card: Card): Promise<Response> => {
   const endpoint = `api/validate-credit-card/`;
 
   const body = {
@@ -20,15 +24,19 @@ export const uploadCardData = async (card: Card) => {
 
   try {
     const response = await api.post(endpoint, body);
-    console.log(response);
     if (response.status === 200) {
-      return response.data.data;
+      return { type: "success", msg: "Your card was accepted!" };
     }
-    return response.data;
-  } catch (exception: unknown | Error | AxiosError) {
-    return (
-      exception?.response?.data?.error ||
-      `Failed to upload card number. ${exception?.toString()}`
-    );
+    return {
+      type: "error",
+      msg: "There was a problem with your request, please wait and try again",
+    };
+  } catch (exception: any) {
+    return {
+      type: "error",
+      msg:
+        exception?.response?.data?.error ||
+        `Failed to upload card number. ${exception?.toString()}`,
+    };
   }
 };

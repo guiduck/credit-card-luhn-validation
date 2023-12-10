@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./app";
 import "@repo/tailwind-config/global.css";
 import { ThemeProvider } from "./context/theme-provider";
+import { SnackbarPropsContextProvider } from "./context/snackbar-context";
 
 const container = document.getElementById("root");
 if (container) {
@@ -10,7 +11,9 @@ if (container) {
   root.render(
     <React.StrictMode>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <App />
+        <SnackbarPropsContextProvider>
+          <App />
+        </SnackbarPropsContextProvider>
       </ThemeProvider>
     </React.StrictMode>
   );

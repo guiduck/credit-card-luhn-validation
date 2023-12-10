@@ -1,24 +1,26 @@
 export const validateCreditCardNumber = (creditCardNumber: string): boolean => {
-  const reversedNumber = creditCardNumber
-    .replace(/\s/g, "")
-    .split("")
-    .reverse()
-    .join("");
+  const sanitizedNumber = creditCardNumber.replace(/\s/g, "");
 
-  let sum = 0;
-  const parity = reversedNumber.length % 2;
-
-  for (let i = 0; i < reversedNumber.length; i++) {
-    const digit = parseInt(reversedNumber[i], 10);
-
-    if (i % 2 !== parity) {
-      sum += digit;
-    } else {
-      sum += digit > 4 ? digit * 2 - 9 : digit * 2;
-    }
+  if (!/^\d+$/.test(sanitizedNumber)) {
+    return false;
   }
 
-  return (
-    reversedNumber[reversedNumber.length - 1] === (10 - (sum % 10)).toString()
-  );
+  let sum = 0;
+  let double = false;
+
+  for (let i = sanitizedNumber.length - 1; i >= 0; i--) {
+    let digit = parseInt(sanitizedNumber[i], 10);
+
+    if (double) {
+      digit *= 2;
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+
+    sum += digit;
+    double = !double;
+  }
+
+  return sum % 10 === 0;
 };

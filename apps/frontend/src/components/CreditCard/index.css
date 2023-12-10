@@ -1,0 +1,30 @@
+/* components/Card.css */
+.card {
+  height: 200px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card .front {
+  background-color: #e1e1e1;
+  z-index: 10;
+  transform: translateZ(1px);
+}
+
+.card .back {
+  background-color: #cacaca;
+  z-index: -10;
+  transform: rotateY(180deg) translateZ(1px);
+}

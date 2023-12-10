@@ -1,3 +1,5 @@
+import React from "react";
+
 interface LoaderProps {
   size: "xs" | "sm" | "md" | "lg";
 }

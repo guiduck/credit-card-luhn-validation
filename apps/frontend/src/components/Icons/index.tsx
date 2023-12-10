@@ -1,6 +1,6 @@
 import React from "react";
 
-type IconProps = React.HTMLAttributes<SVGElement>;
+type IconProps = React.HTMLAttributes<SVGElement> & { fill?: string };
 
 export const Icons = {
   logo: (props: IconProps) => (
@@ -117,9 +117,58 @@ export const Icons = {
       strokeWidth="2"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <rect height="14" rx="2" width="20" x="2" y="5" />
       <path d="M2 10h20" />
+    </svg>
+  ),
+  snackError: (props: IconProps) => (
+    <svg
+      className="stroke-current shrink-0 h-6 w-6"
+      fill={props.fill || "none"}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  ),
+  snackSuccess: (props: IconProps) => (
+    <svg
+      className="stroke-current shrink-0 h-6 w-6"
+      fill={props.fill || "none"}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+    </svg>
+  ),
+  snackNeutral: (props: IconProps) => (
+    <svg
+      className="stroke-current shrink-0 w-6 h-6"
+      fill={props.fill || "none"}
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
     </svg>
   ),
 };
