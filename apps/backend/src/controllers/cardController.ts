@@ -45,7 +45,7 @@ class CardController {
         .json({ message: "card doesn't exist", success: true });
     } catch (err: any) {
       return res.status(400).json({
-        message: err.message || "unexpected error",
+        error: err.message || "unexpected error",
       });
     }
   }
