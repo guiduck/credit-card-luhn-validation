@@ -3,7 +3,10 @@
   "extends": "@repo/typescript-config/vite.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "test-utils": ["./utils/test-utils"]
+    }
   },
   "include": ["src", "tailwind.config.js", "postcss.config.js", "jest.config.js"]
 }

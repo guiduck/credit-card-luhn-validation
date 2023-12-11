@@ -1,6 +1,6 @@
-import React from "react";
+import * as React from "react";
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { render } from "../../utils/test-utils";
 import { Button } from ".";
 
 describe("Button", () => {

@@ -1,5 +1,7 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import * as React from "react";
+import "@testing-library/jest-dom";
+import { fireEvent } from "@testing-library/react";
+import { render } from "../../utils/test-utils";
 import { ModeToggle } from ".";
 
 describe("ModeToggle", () => {
