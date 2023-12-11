@@ -7,36 +7,47 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../Button";
-import { Icons } from "../Icons";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import { CreditCard, Loader } from "..";
-import { creditCardMask } from "../utils/masks/credit-card";
-import { nameValidator } from "../utils/validators/name";
-import { cardNumberValidator } from "../utils/validators/cardNumber";
-import { uploadCardData } from "../../services/cardValidation";
-import { cvcVallidator } from "../utils/validators/cvc";
+import { uploadCardData } from "../../services/cardServices";
 import { useSnackbar } from "../../hooks/useSnackbar";
+import { nameValidator } from "../../utils/validators/name";
+import { cardNumberValidator } from "../../utils/validators/cardNumber";
+import { cvcVallidator } from "../../utils/validators/cvc";
+import { creditCardMask } from "../../utils/masks/credit-card";
+import { Icons } from "../Icons";
 
-export function PaymentCard(): JSX.Element {
-  const [name, setName] = useState("renato");
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+interface PaymentCardProps {
+  onSuccess: () => void;
+}
+
+export function PaymentCard({ onSuccess }: PaymentCardProps): JSX.Element {
+  const [name, setName] = useState("Renato Lins");
   const [nameError, setNameError] = useState("");
 
-  const [cardNumber, setCardNumber] = useState("");
+  const [cardNumber, setCardNumber] = useState("**** **** **** 1234");
   const [numberError, setNumberError] = useState("");
 
   const [cardMonth, setCardMonth] = useState("");
-  const [cardYear, setCardYear] = useState("");
+  const [cardYear, setCardYear] = useState("2024");
 
   const [cvc, setCvc] = useState("");
   const [cvcError, setCvcError] = useState("");
@@ -47,25 +58,6 @@ export function PaymentCard(): JSX.Element {
 
   const snackbar = useSnackbar();
 
-  const handleFlip = () => {
-    setFlipped(!flipped);
-  };
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   const scrollToError = (elementId: string, offset = 85) => {
     const elementToScroll = document.getElementById(elementId);
     if (!elementToScroll) return;
@@ -74,10 +66,18 @@ export function PaymentCard(): JSX.Element {
   };
 
   const getDate = () => {
-    const monthNumber = months.findIndex((item) => item === cardMonth) + 1;
+    const monthNumber = MONTHS.findIndex((item) => item === cardMonth) + 1;
     return `${
       String(monthNumber).length < 2 ? "0" : ""
     }${monthNumber}/${cardYear}`;
+  };
+
+  const clearFields = () => {
+    setName("");
+    setCardNumber("");
+    setCardMonth("");
+    setCardYear("");
+    setCvc("");
   };
 
   const handleSubmit = async () => {
@@ -120,7 +120,7 @@ export function PaymentCard(): JSX.Element {
 
     const currentCard = {
       holder: name,
-      cardNumber: cardNumber.replace(/-/g, ""),
+      creditCardNumber: cardNumber.replace(/-/g, ""),
       expires: getDate(),
       cvc,
     };
@@ -135,6 +135,10 @@ export function PaymentCard(): JSX.Element {
         3000,
         result.type
       );
+      if (result.type === "success") {
+        clearFields();
+        onSuccess();
+      }
     } catch (exception) {
       snackbar(exception as string, 3000);
     } finally {
@@ -182,7 +186,7 @@ export function PaymentCard(): JSX.Element {
                 setCardNumber(e.target.value);
                 setNumberError("");
               }}
-              placeholder=""
+              placeholder="**** **** **** ****"
               value={creditCardMask(cardNumber)}
             />
             {numberError ? (
@@ -197,14 +201,14 @@ export function PaymentCard(): JSX.Element {
               <Label htmlFor="month">Expires</Label>
               <Select
                 onValueChange={(value) => {
-                  setCardMonth(months[Number(value) - 1]);
+                  setCardMonth(MONTHS[Number(value) - 1]);
                 }}
               >
                 <SelectTrigger id="month">
                   <SelectValue placeholder="Month" />
                 </SelectTrigger>
                 <SelectContent>
-                  {months.map((month, i) => (
+                  {MONTHS.map((month, i) => (
                     <SelectItem key={month} value={`${i + 1}`}>
                       {month}
                     </SelectItem>
@@ -264,7 +268,7 @@ export function PaymentCard(): JSX.Element {
         </CardContent>
         <CardFooter>
           <Button className="w-full" onClick={handleSubmit} type="submit">
-            {loading ? <Loader size="sm" /> : "Continue"}
+            {loading ? <Icons.spinner /> : "Continue"}
           </Button>
         </CardFooter>
       </Card>

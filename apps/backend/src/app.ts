@@ -4,6 +4,7 @@ import type { ConnectOptions } from "mongoose";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import { json, urlencoded } from "body-parser";
+import { log } from "@repo/logger";
 import router from "./routes";
 
 class App {
@@ -29,13 +30,19 @@ class App {
     this.express.use(loggerMiddleware);
   }
 
-  private database(): void {
-    mongoose.connect(
-      "mongodb+srv://guiduck02:654321kcudiug@cardfactory.qpluamv.mongodb.net/?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-      } as ConnectOptions
-    );
+  private async database(): Promise<void> {
+    try {
+      await mongoose.connect(
+        process.env.MONGODB_URI ||
+          "mongodb+srv://guiduck02:654321kcudiug@cardfactory.qpluamv.mongodb.net/?retryWrites=true&w=majority",
+        {
+          useNewUrlParser: true,
+        } as ConnectOptions
+      );
+      log("Connected to database!");
+    } catch (error) {
+      console.error("Failed to connect to database:", error);
+    }
   }
 
   private routes(): void {

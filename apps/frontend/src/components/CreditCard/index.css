@@ -1,9 +1,14 @@
-/* components/Card.css */
+@import url(https://fonts.googleapis.com/css?family=Exo+2:200i);
+
 .card {
   height: 200px;
   perspective: 1000px;
   transform-style: preserve-3d;
   transition: transform 0.5s;
+}
+
+.card p {
+  font-family: 'Exo 2', sans-serif;
 }
 
 .card.flipped {

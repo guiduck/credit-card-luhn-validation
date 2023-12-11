@@ -1,19 +1,75 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { PaymentCard } from "../components";
 import { ModeToggle } from "../components/ModeToggle";
 import { Snackbar } from "../components/Snackbar";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Label } from "../components/ui/label";
 import { Icons } from "../components/Icons";
+import { Separator } from "../components/ui/separator";
+import { deleteUserCard, getUserCards } from "../services/cardServices";
+import { useSnackbar } from "../hooks/useSnackbar";
+import { CardList } from "../components/CardList";
+import { cardMock } from "../mocks/cardMock";
+import type { CardModel } from "../models/cardModel";
 
 function App(): JSX.Element {
+  const [cardView, setCardView] = useState<"new" | "existing">("new");
+
+  const [cardList, setCardList] = useState<CardModel[] | undefined>();
+
+  const [loading, setLoading] = useState(false);
+
+  const snackbar = useSnackbar();
+
+  const updateCardList = async () => {
+    setLoading(true);
+    try {
+      const result = await getUserCards();
+      if (result?.type === "success") {
+        setCardList(result.data?.map((card) => ({ ...card, id: card._id })));
+      }
+    } catch (exception) {
+      snackbar(exception as string, 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteCard = async (cardId: string) => {
+    setLoading(true);
+    try {
+      const result = await deleteUserCard(cardId);
+      snackbar(
+        result.msg ||
+          (result.type === "success"
+            ? "Card was deleted!"
+            : "There was a problem, try again later"),
+        3000,
+        result.type
+      );
+      if (result.type === "success") {
+        updateCardList();
+      }
+    } catch (exception) {
+      snackbar(exception as string, 3000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (cardView === "new") return;
+    updateCardList();
+  }, [cardView]);
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center max-w-full mx-auto my-0 py-0 px-4 gap-8">
       <Snackbar />
       <ModeToggle />
-      <h1 className="text-2xl font-bold text-center">
-        Add a new payment method to your account.
+      <h1 className="text-[22px] w-full max-w-[635px] font-bold text-center ">
+        Select a payment method.
       </h1>
+
       <RadioGroup className="grid grid-cols-3 gap-4" defaultValue="card">
         <div>
           <RadioGroupItem className="peer sr-only" id="card" value="card" />
@@ -27,7 +83,12 @@ function App(): JSX.Element {
         </div>
 
         <div>
-          <RadioGroupItem className="peer sr-only" id="paypal" value="paypal" />
+          <RadioGroupItem
+            className="peer sr-only"
+            disabled
+            id="paypal"
+            value="paypal"
+          />
           <Label
             className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
             htmlFor="paypal"
@@ -38,7 +99,12 @@ function App(): JSX.Element {
         </div>
 
         <div>
-          <RadioGroupItem className="peer sr-only" id="apple" value="apple" />
+          <RadioGroupItem
+            className="peer sr-only"
+            disabled
+            id="apple"
+            value="apple"
+          />
           <Label
             className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
             htmlFor="apple"
@@ -48,7 +114,51 @@ function App(): JSX.Element {
           </Label>
         </div>
       </RadioGroup>
-      <PaymentCard />
+
+      <div>
+        <div className="space-y-1">
+          <h4 className="text-sm font-medium leading-none">Pay by card</h4>
+          <p className="text-sm text-muted-foreground">
+            use an existing or create a new one.
+          </p>
+        </div>
+        <Separator className="my-4" />
+        <div className="flex h-5 items-center gap-6 text-sm">
+          <button
+            onClick={() => {
+              setCardView("new");
+            }}
+            type="button"
+          >
+            <p className="text-lg hover:underline p-4">New Card</p>
+          </button>
+          <Separator orientation="vertical" />
+          <button
+            onClick={() => {
+              setCardView("existing");
+            }}
+            type="button"
+          >
+            <p className="text-lg hover:underline p-4">My Cards</p>
+          </button>
+        </div>
+      </div>
+
+      {cardView === "new" && (
+        <PaymentCard
+          onSuccess={() => {
+            setCardView("existing");
+          }}
+        />
+      )}
+
+      {cardView === "existing" && (
+        <CardList
+          cards={cardList || [cardMock]}
+          loading={loading}
+          onCardDelete={deleteCard}
+        />
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export const api = axios.create({
 //   return config;
 // });
 
-api.interceptors.response.use(
+/* api.interceptors.response.use(
   function (response) {
     return response;
   },
@@ -28,6 +28,6 @@ api.interceptors.response.use(
 
     return Promise.reject(error);
   }
-);
+); */
 
 export default api;

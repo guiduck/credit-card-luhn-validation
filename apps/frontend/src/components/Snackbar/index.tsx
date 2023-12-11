@@ -26,13 +26,13 @@ export function Snackbar(): JSX.Element {
   const setHideTime = () => {
     setTimeout(
       () => {
-        setHide();
+        hideSnackbar();
       },
       dataSnackbar?.time
     );
   };
 
-  const setHide = () => {
+  const hideSnackbar = () => {
     setDataSnackbar?.({
       show: false,
       message: "",
@@ -74,10 +74,8 @@ export function Snackbar(): JSX.Element {
               </p>
             </div>
             <Button
-              className=" text-[#0F172A] dark:text-white bg-white dark:bg-[#0F172A] "
-              onClick={() => {
-                setHide();
-              }}
+              className="text-[#0F172A] dark:text-white bg-white dark:bg-[#0F172A] "
+              onClick={hideSnackbar}
               type="button"
             >
               close
