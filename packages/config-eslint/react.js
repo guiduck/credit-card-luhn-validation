@@ -14,7 +14,7 @@ module.exports = {
   globals: {
     JSX: true,
   },
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "jest"],
   settings: {
     "import/resolver": {
       typescript: {
