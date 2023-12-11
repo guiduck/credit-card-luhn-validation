@@ -23,8 +23,12 @@ export function CardList({
   onCardDelete,
   loading,
 }: CardListProps): JSX.Element {
+  const maskCreditCardNumber = (cardNumber: string) => {
+    const lastFourDigits = cardNumber.slice(-8, -4);
+    return `**** **** ${lastFourDigits} ****`;
+  };
   return (
-    <Card className="min-h-[580px] min-w-[340px] sm:min-w-[500px] w-[calc(100% - 32px)]">
+    <Card className="min-h-[480px] min-w-[340px] sm:min-w-[500px] w-[calc(100% - 32px)]">
       <CardContent className="flex flex-col gap-6">
         {/* <CreditCard
             className="mt-[-150px]"
@@ -43,7 +47,7 @@ export function CardList({
             <TableRow className="w-full">
               <TableHead className="w-[30%]">Holder</TableHead>
               <TableHead className="w-[30%]">Number</TableHead>
-              <TableHead className="w-[30%] text-right">option</TableHead>
+              <TableHead className="w-[30%] text-right pr-4">option</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -53,17 +57,24 @@ export function CardList({
                   {card.holder}
                 </TableCell>
                 <TableCell className="min-w-[200px] font-medium">
-                  {card.creditCardNumber}
+                  {maskCreditCardNumber(card.creditCardNumber)}
                 </TableCell>
                 <TableCell className="text-right">
                   <button
-                    className="bg-red-400 text-white py-1 px-2 rounded-sm text-[12px] font-bold"
+                    className="bg-green-300 h-[18px] w-[58px] text-center flex items-center justify-center dark:text-black dark:bg-yellow-100 mb-[2px]  text-white px-2 rounded-sm text-[12px] font-bold"
+                    disabled
+                    type="button"
+                  >
+                    <p>use</p>
+                  </button>
+                  <button
+                    className="bg-red-400 h-[18px] w-[58px] text-center flex items-center justify-center text-white px-2 rounded-sm text-[12px] font-bold"
                     onClick={() => {
                       onCardDelete(card.id!);
                     }}
                     type="button"
                   >
-                    {loading ? <Icons.spinner /> : "remove"}
+                    <p>{loading ? <Icons.spinner /> : "remove"}</p>
                   </button>
                 </TableCell>
               </TableRow>

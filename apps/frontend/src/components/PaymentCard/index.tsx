@@ -11,7 +11,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../Button";
 import { Card, CardContent, CardFooter } from "../ui/card";
-import { CreditCard, Loader } from "..";
+import { CreditCard } from "..";
 import { uploadCardData } from "../../services/cardServices";
 import { useSnackbar } from "../../hooks/useSnackbar";
 import { nameValidator } from "../../utils/validators/name";

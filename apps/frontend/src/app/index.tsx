@@ -63,12 +63,21 @@ function App(): JSX.Element {
   }, [cardView]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center max-w-full mx-auto my-0 py-0 px-4 gap-8">
+    <div className="min-h-screen flex flex-col py-8 items-center justify-center max-w-full mx-auto my-0 py-0 px-4 gap-8">
       <Snackbar />
-      <ModeToggle />
-      <h1 className="text-[22px] w-full max-w-[635px] font-bold text-center ">
-        Select a payment method.
-      </h1>
+
+      <header>
+        <div className="w-screen pt-2 pl-8 z-10  fixed top-0 left-0  h-[60px] border-slate-900 bg-white dark:bg-slate-900 dark:border-white border-b-4">
+          <h1 className="text-3xl text-start font-bold">Checkout</h1>
+        </div>
+      </header>
+
+      <div className="w-full max-w-[635px] flex items-end">
+        <ModeToggle />
+        <h1 className="text-[22px] w-full max-w-[635px] font-bold text-center ">
+          Select a payment method.
+        </h1>
+      </div>
 
       <RadioGroup className="grid grid-cols-3 gap-4" defaultValue="card">
         <div>
