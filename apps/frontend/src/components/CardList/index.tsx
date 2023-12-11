@@ -59,14 +59,15 @@ export function CardList({
                 <TableCell className="min-w-[200px] font-medium">
                   {maskCreditCardNumber(card.creditCardNumber)}
                 </TableCell>
-                <TableCell className="text-right">
-                  <button
+                <TableCell className="text-right flex justify-end">
+                  {/* not implemented yet */}
+                  {/* <button
                     className="bg-green-300 h-[18px] w-[58px] text-center flex items-center justify-center dark:text-black dark:bg-yellow-100 mb-[2px]  text-white px-2 rounded-sm text-[12px] font-bold"
                     disabled
                     type="button"
                   >
                     <p>use</p>
-                  </button>
+                  </button> */}
                   <button
                     className="bg-red-400 h-[18px] w-[58px] text-center flex items-center justify-center text-white px-2 rounded-sm text-[12px] font-bold"
                     onClick={() => {

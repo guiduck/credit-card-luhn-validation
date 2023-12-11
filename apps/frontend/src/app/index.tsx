@@ -69,14 +69,16 @@ function App(): JSX.Element {
       <Snackbar />
 
       <header>
-        <div className="w-screen pt-2 pl-8 z-[1] fixed top-0 left-0 h-[60px] border-slate-900 bg-white dark:bg-slate-950 dark:border-white border-b-4">
-          <h1 className="text-3xl text-start font-bold">Checkout</h1>
+        <div className="w-screen pt-2 pb-2 pl-8 z-[1] flex items-center justify-center fixed top-0 left-0 h-[60px] border-slate-900 bg-white dark:bg-slate-950 dark:border-white border-b-2 shadow-md">
+          <div className="max-w-[635px] w-full flex justify-between">
+            <h1 className="text-3xl text-start font-bold">Checkout</h1>
+            <ModeToggle />
+          </div>
         </div>
       </header>
 
       <div className="w-full max-w-[635px] flex items-end">
-        <ModeToggle />
-        <h1 className="text-[22px] w-full max-w-[635px] font-bold text-center ">
+        <h1 className="text-[24px] w-full max-w-[635px] font-bold text-center ">
           Select a payment method.
         </h1>
       </div>
@@ -141,7 +143,13 @@ function App(): JSX.Element {
             }}
             type="button"
           >
-            <p className="text-lg hover:underline p-4">New Card</p>
+            <p
+              className={`text-lg hover:underline ${
+                cardView === "new" ? "underline" : ""
+              } p-4`}
+            >
+              New Card
+            </p>
           </button>
           <Separator orientation="vertical" />
           <button
@@ -150,7 +158,13 @@ function App(): JSX.Element {
             }}
             type="button"
           >
-            <p className="text-lg hover:underline p-4">My Cards</p>
+            <p
+              className={`text-lg hover:underline ${
+                cardView === "existing" ? "underline" : ""
+              } p-4`}
+            >
+              My Cards
+            </p>
           </button>
         </div>
       </div>
