@@ -48,7 +48,7 @@ function App(): JSX.Element {
         result.type
       );
       if (result.type === "success") {
-        updateCardList();
+        await updateCardList();
       }
     } catch (exception) {
       snackbar(exception as string, 3000);
@@ -59,7 +59,9 @@ function App(): JSX.Element {
 
   useEffect(() => {
     if (cardView === "new") return;
-    updateCardList();
+    updateCardList().catch((exception) => {
+      console.error(exception as string);
+    });
   }, [cardView]);
 
   return (
@@ -67,7 +69,7 @@ function App(): JSX.Element {
       <Snackbar />
 
       <header>
-        <div className="w-screen pt-2 pl-8 z-10  fixed top-0 left-0  h-[60px] border-slate-900 bg-white dark:bg-slate-900 dark:border-white border-b-4">
+        <div className="w-screen pt-2 pl-8 z-[1] fixed top-0 left-0 h-[60px] border-slate-900 bg-white dark:bg-slate-950 dark:border-white border-b-4">
           <h1 className="text-3xl text-start font-bold">Checkout</h1>
         </div>
       </header>

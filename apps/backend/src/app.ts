@@ -4,8 +4,8 @@ import type { ConnectOptions } from "mongoose";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import { json, urlencoded } from "body-parser";
-import { log } from "@repo/logger";
 import router from "./routes";
+import { log } from "./utils/logger";
 
 class App {
   public express: express.Application;

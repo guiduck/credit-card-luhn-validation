@@ -1,5 +1,5 @@
-import { log } from "@repo/logger";
 import app from "./app";
+import { log } from "./utils/logger";
 
 const port = process.env.PORT || 5001;
 

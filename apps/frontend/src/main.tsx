@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./app";
-import "@repo/tailwind-config/global.css";
+import "./global.css";
 import { ThemeProvider } from "./context/theme-provider";
 import { SnackbarPropsContextProvider } from "./context/snackbar-context";
 

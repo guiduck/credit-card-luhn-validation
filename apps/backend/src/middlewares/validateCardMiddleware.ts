@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { log } from "@repo/logger";
+import { log } from "../utils/logger";
 
 export const validateCreditCardMiddleware = (
   req: Request,
