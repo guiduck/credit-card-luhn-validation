@@ -1,7 +1,6 @@
 import * as React from "react";
 import "@testing-library/jest-dom";
-import { fireEvent, screen } from "@testing-library/react";
-import { render } from "../../utils/test-utils";
+import { fireEvent, render, screen } from "../../utils/test-utils";
 import { CardList } from ".";
 
 const mockCards = [
@@ -24,6 +23,14 @@ const mockCards = [
 ];
 
 describe("CardList", () => {
+  it("renders without errors", () => {
+    const { container } = render(
+      <CardList cards={mockCards} onCardDelete={jest.fn()} />
+    );
+
+    expect(container).toBeInTheDocument();
+  });
+
   it("renders the list of cards correctly", () => {
     render(<CardList cards={mockCards} onCardDelete={jest.fn()} />);
 

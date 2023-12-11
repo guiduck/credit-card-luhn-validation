@@ -11,7 +11,7 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": false,
-    "target": "ESNext",
+    "target": "es2022",
     "types": ["vite/client"]
   }
 }

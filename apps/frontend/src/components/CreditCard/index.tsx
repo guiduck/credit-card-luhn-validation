@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import * as React from "react";
 import { Card } from "../ui/card";
 import { cn } from "../../utils/cn";
 import "./index.css";
@@ -19,7 +19,7 @@ export function CreditCard({
   expiration,
   cvc,
 }: Readonly<CreditCardProps>): JSX.Element {
-  const cardClass = useMemo(
+  const cardClass = React.useMemo(
     () => (flipped ? "card flipped" : "card"),
     [flipped]
   );
