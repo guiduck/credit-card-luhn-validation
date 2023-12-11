@@ -1,11 +1,28 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Default",
   "compilerOptions": {
+    "composite": false,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "moduleResolution": "Bundler",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "strictNullChecks": true,
     "lib": ["ES2015"],
     "module": "es2015",
     "outDir": "./dist",
     "rootDir": "./src"
   },
   "exclude": ["node_modules"],
-  "extends": "@repo/typescript-config/base.json",
   "include": ["src"]
 }

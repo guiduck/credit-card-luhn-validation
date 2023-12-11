@@ -15,7 +15,6 @@
     "@radix-ui/react-radio-group": "^1.1.3",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-separator": "^1.0.3",
-    "@repo/tailwind-config": "*",
     "@types/axios": "^0.14.0",
     "axios": "^1.6.2",
     "lucide-react": "^0.294.0",
