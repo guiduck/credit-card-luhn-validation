@@ -39,7 +39,7 @@ You can see a live demo of [credit-card-luhn-validation here!](https://credit-ca
 - `src/context` context for flobal state management;
 - `src/hooks` hook for handling snackbar data state;
 - `src/mocks` mocks credit card;
-- `src/models` mocks credit card;
+- `src/models` credit card model;
 - `src/services` cardServices for async operations;
 - `src/utils` utils cn file;
 - `src/utils/validators` validators used;
@@ -218,7 +218,7 @@ Visit [http://localhost:5001](http://localhost:5001) to explore the backend api.
 
 While developing checkout page, I am primarly focused on enhancing user experience and functionality:
 
-- **UI:** the ui was very improvised, while developing I had many ideas and little time to explore.
+- **UI:** the ui was designed very carefully, but while developing I had many ideas and little time to explore.
 
 - **Input Validation:** All frontend validations are being handled manually, it would be preferable to use a lib(react-hook-form or formik).
 
