@@ -7,6 +7,8 @@ import { json, urlencoded } from "body-parser";
 import router from "./routes";
 import { log } from "./utils/logger";
 
+require("dotenv").config();
+
 class App {
   public express: express.Application;
 
@@ -32,13 +34,9 @@ class App {
 
   private async database(): Promise<void> {
     try {
-      await mongoose.connect(
-        process.env.MONGODB_URI ||
-          "mongodb+srv://guiduck02:654321kcudiug@cardfactory.qpluamv.mongodb.net/?retryWrites=true&w=majority",
-        {
-          useNewUrlParser: true,
-        } as ConnectOptions
-      );
+      await mongoose.connect(process.env.DB_URL || "", {
+        useNewUrlParser: true,
+      } as ConnectOptions);
       log("Connected to database!");
     } catch (error) {
       console.error("Failed to connect to database:", error);
